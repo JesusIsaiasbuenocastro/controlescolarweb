@@ -1,0 +1,35 @@
+
+.cards-format{
+  text-align: center;
+  margin: 4rem;
+}
+
+.cards-margin{
+  margin-top: 15rem;
+}
+
+.img-cards{
+  size: 1rem;
+}
+
+.format-shadow{
+  border-radius: 30px;
+  box-shadow: 7px 7px 15px PowderBlue;
+}
+
+.card-border{
+  border: 0px;
+}
+
+.format-busqueda{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
+
+.format-padding{
+  padding: .5rem;
+}
