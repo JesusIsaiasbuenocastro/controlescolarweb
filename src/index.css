@@ -33,3 +33,26 @@
 .format-padding{
   padding: .5rem;
 }
+
+.registro-form{
+  
+  border-radius: 4rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+  
+  height: 45rem;
+  width:40rem;
+  margin:0px auto; /*centrar*/
+  margin-top: 4rem;
+  padding: 3rem;
+}
+
+.registro-form-centrar{
+  align-items: center;
+}
+
+.header-registro{
+  margin-bottom: 3rem;
+  text-align: center;
+}

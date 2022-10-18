@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import TableAlumnos from "../tables/tablealumnos";
+import Mensaje from "../mensajes/mensaje";
+import OpcionesSelect from "../genericos/opcionesselect";
 
 const ConsultaAlumnos = () => {
 
     const [consultaAlumno, setConsultaAlumno] = useState([]);
+    const [consultaGrupo, setConsultaGrupo] = useState([]);
+    const [alumnos, setAlumnos] = useState(true);
     const [busqueda, setBusqueda] = useState("");
     const [checkMatricula, setCheckMatricula] = useState(false);
     const [checkGrupo, setCheckGrupo] = useState(false);
@@ -12,22 +16,44 @@ const ConsultaAlumnos = () => {
     useEffect(() => {
         const consultarAlumnos = async () => {
             try {
-
-                let respuesta;
                                 
-                const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/alumno/');
+               // const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/alumno/');
+               const response = await axios.get('http://localhost:8080/api/alumno/obtenerlista');
                 console.log(response.data.listaAlumnos);
                 if(response.data.response.codRetorno === '0'){
                     setConsultaAlumno(response.data.listaAlumnos)
+                    setAlumnos(false);
                 }else{
                     //mostrar mensaje que no hay información 
+                    setAlumnos(true);
                 }
-               
+
             } catch (error) {
                 console.log(error)
             }
         }
-        consultarAlumnos();
+
+        const consultarGrupos = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/grupo/');
+                //const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/grupo/');
+                
+                console.log(response.data.listaGrupos);
+                if(response.data.response.codRetorno === '0'){
+                    setConsultaGrupo(response.data.listaGrupos) 
+                } 
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        //Se pudiera poner un spinner
+        setTimeout(() => {
+                consultarAlumnos();
+                consultarGrupos();
+        }, 2000);
+
+        
     },[]);
 
     const actualizarBusqueda = (e) => {
@@ -51,17 +77,17 @@ const ConsultaAlumnos = () => {
             <div className="row">
                 <div className="col-g">
                     <div className="format-padding">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="chkboxMatricula" onClick={hdlClickBusquedaMatricula} checked={checkMatricula}/>
-                            <label class="custom-control-label" for="chkboxMatricula">Búsqueda por matricula</label>
+                        <div className="custom-control custom-checkbox">
+                            <input type="checkbox" className="custom-control-input" id="chkboxMatricula" onClick={hdlClickBusquedaMatricula} checked={checkMatricula}/>
+                            <label className="custom-control-label" htmlFor="chkboxMatricula">Búsqueda por matricula</label>
                         </div>
                     </div>
                 </div>
                 <div className="col-g">
                     <div className="format-padding">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="checkGrupo" onClick={hdlClickBusquedaGrupo} checked={checkGrupo}/>
-                            <label class="custom-control-label" for="checkGrupo">Búsqueda por grupo</label>
+                        <div className="custom-control custom-checkbox">
+                            <input type="checkbox" className="custom-control-input" id="checkGrupo" onClick={hdlClickBusquedaGrupo} checked={checkGrupo}/>
+                            <label className="custom-control-label" htmlFor="checkGrupo">Búsqueda por grupo</label>
                         </div>
                     </div>
                 </div>    
@@ -72,10 +98,10 @@ const ConsultaAlumnos = () => {
                     <div className="p-4">
                         <div className="row">
                             <div className="col p-1">
-                                <label   for="txtBusquedaMatricula">Búsqueda por matricula</label>
+                                <label   htmlFor="txtBusquedaMatricula">Búsqueda por matricula</label>
                             </div>
                             <div className="col">
-                                <input type="text" class="form-control" id="txtBusquedaMatricula" name="txtBusquedaMatricula"   />
+                                <input type="text" className="form-control" id="txtBusquedaMatricula" name="txtBusquedaMatricula"   />
                             </div>
                         </div>
                     </div>
@@ -90,17 +116,24 @@ const ConsultaAlumnos = () => {
                     <div className="p-4">
                         <div className="row">
                             <div className="col p-1 text-center">
-                                <label   for="buqueda">Búsqueda por grupo</label>
+                                <label   htmlFor="buqueda">Búsqueda por grupo</label>
                             </div>
                             <div className="col">
+                           
                                 <select 
                                     id="buqueda"
                                     name="buqueda"
                                     onChange={actualizarBusqueda}
                                     className='custom-select' >
-                                    <option value="-1"  >Seleccione opción de búsqueda</option>
-                                    <option  value="1" >Por grupo </option>
-                                    <option  value="2" >Por matricula  </option>
+                                    <option value="-1"  >Seleccione un grupo</option>
+                                    {
+                                        consultaGrupo.map(grupo => 
+                                            <OpcionesSelect 
+                                                key={grupo.id}
+                                                opciones={grupo}
+                                            />
+                                        )    
+                                    }
                                 
                                 </select>
                             </div>
@@ -115,34 +148,43 @@ const ConsultaAlumnos = () => {
         </div>
 
         <div className="table-margin">
-            
         
-        <table className="container table table-borderless table-hover ">
-                        
-        <thead height="10" >
-            <tr>
-                <th width="20" >Matricula</th>
-                <th width="100" >Nombre</th>
-                <th width="20" >Apellidos</th>
-                <th width="20" >Telefono</th>
-                <th width="20" >Email</th>
-                <th width="20" >Grupo</th>
-                <th width="20">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {
-                consultaAlumno.map( alumno => (
-                    <TableAlumnos 
-                        key={alumno.matricula}
-                        alumno={alumno}
-                    />
-                ))
-            }
-        </tbody>
-    </table>
+        {
+            !alumnos ?
+                    <table className="container table table-borderless table-hover ">
+                                    
+                    <thead height="10" >
+                        <tr>
+                            <th width="20" >Matricula</th>
+                            <th width="100" >Nombre</th>
+                            <th width="20" >Apellidos</th>
+                            <th width="20" >Telefono</th>
+                            <th width="20" >Email</th>
+                            <th width="20" >Grupo</th>
+                            <th width="20">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            consultaAlumno.map( alumno => (
+                                <TableAlumnos 
+                                    key={alumno.matricula}
+                                    alumno={alumno}
+                                />
+                            ))
+                        }
+                    </tbody>
+                </table>
+                
+                :
+                <Mensaje
+                    mensaje={"No hay información para mostrar"}
+                />
+
+        }
+      
     
-    </div>
+        </div>
     </>
     );
 }
