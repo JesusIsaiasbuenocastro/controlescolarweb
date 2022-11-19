@@ -15,6 +15,9 @@ import ModificacionMaestro from "./componentes/maestros/modificacionmaestros";
 import ConsultaCalificacion from "./componentes/calificaciones/consultacalificacion";
 import Nuevacalificacion from "./componentes/calificaciones/nuevacalificacion";
 import ModificacionCalificacion from "./componentes/calificaciones/modificacioncalificacion";
+import ConsultaMaterias from "./componentes/materias/consultaMaterias"; 
+import ModificacionMaterias from "./componentes/materias/modificacionMaterias"; 
+import NuevoMaterias from "./componentes/materias/nuevoMaterias";
 
 function App() {
   return (
@@ -57,6 +60,20 @@ function App() {
             <Route index element= {<ModificacionCalificacion/>} />
             <Route path =":id" element ={<ModificacionCalificacion/>}/>
         </Route>
+
+        //rutas materias
+        <Route path='/materias/consultamaterias' element={<LayOut/>}>
+            <Route index element= {<ConsultaMaterias/>} />
+        </Route>
+        <Route path='/materias/altamaterias' element={<LayOut/>}>
+            <Route index element= {<NuevoMaterias/>} />
+        </Route>
+        <Route path='/materias/modificacionmaterias/:id' element={<LayOut/>}>
+            <Route index element= {<ModificacionMaterias/>} />
+            <Route path =":id" element ={<ModificacionMaterias/>}/>
+        </Route>
+
+
     </Routes>
   
   </BrowserRouter>

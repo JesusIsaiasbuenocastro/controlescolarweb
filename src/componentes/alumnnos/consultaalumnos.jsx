@@ -9,43 +9,17 @@ const ConsultaAlumnos = () => {
     const [consultaAlumno, setConsultaAlumno] = useState([]);
     const [consultaGrupo, setConsultaGrupo] = useState([]);
     const [alumnos, setAlumnos] = useState(true);
-    const [busqueda, setBusqueda] = useState("");
+    const [busqueda, setBusqueda] = useState({
+        matricula : 0,
+        grupo : '-1'
+    });
     const [checkMatricula, setCheckMatricula] = useState(false);
     const [checkGrupo, setCheckGrupo] = useState(false);
+    const [mensaje, setMensaje] = useState('');
+    const [advertencia, setAdvertencia] = useState(false);
+
 
     useEffect(() => {
-        const consultarAlumnos = async () => {
-            try {
-                                
-               // const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/alumno/');
-               const response = await axios.get('http://localhost:8080/api/alumno/obtenerlista');
-                console.log(response.data.listaAlumnos);
-                if(response.data.response.codRetorno === '0'){
-                    setConsultaAlumno(response.data.listaAlumnos)
-                    setAlumnos(false);
-                }else{
-                    //mostrar mensaje que no hay información 
-                    setAlumnos(true);
-                }
-
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        const consultarGrupos = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/grupo/');
-                //const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/grupo/');
-                
-                console.log(response.data.listaGrupos);
-                if(response.data.response.codRetorno === '0'){
-                    setConsultaGrupo(response.data.listaGrupos) 
-                } 
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
         //Se pudiera poner un spinner
         setTimeout(() => {
@@ -55,21 +29,139 @@ const ConsultaAlumnos = () => {
 
         
     },[]);
+    const consultarAlumnos = async () => {
+        try {
+                            
+           // const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/alumno/obtenerlista');
+           const response = await axios.get('http://localhost:8080/api/alumno/obtenerlista');
+            console.log(response.data.listaAlumnos);
+            if(response.data.response.codRetorno === '0'){
+                setConsultaAlumno(response.data.listaAlumnos)
+                setAlumnos(false);
+            }else{
+                //mostrar mensaje que no hay información 
+                setAlumnos(true);
+            }
 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const consultarGrupos = async () => {
+        try {
+            //const response = await axios.get('http://localhost:8080/api/grupo/');
+            const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/grupo/');
+            
+            if(response.data.response.codRetorno === '0'){
+                setConsultaGrupo(response.data.listaGrupos) 
+            } 
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const actualizarBusqueda = (e) => {
         e.preventDefault();
-        setBusqueda({
-            ...busqueda,
-            [e.target.name] : e.target.value
-        });
+        const esValido = e.target.validity.valid;
+        if(esValido){
+            setBusqueda({
+                ...busqueda,
+                [e.target.name] : e.target.value
+            });
+        }
+        
     }
 
-    const hdlClickBusquedaMatricula = () => setCheckMatricula(!checkMatricula)
-    const hdlClickBusquedaGrupo = () => setCheckGrupo(!checkGrupo)
+    const buscarPorFiltro = async() => {
+        if(!validacionesFiltro()){
+            setAdvertencia(true); 
+        }else{
+            if (checkMatricula || checkGrupo) {
+                obtenerListaAlumnosFiltro();
+                
+            }else{
+                consultarAlumnos();
+            } 
+            setAdvertencia(false); 
+        }
+
+       
+       
+    }
+
+    const obtenerListaAlumnosFiltro = async () => {
+        let url = `http://localhost:8080/api/alumno/obtenerlistafiltro` ;
+        try {
+            let request;
+    
+            request = await fetch(url,{
+                method: 'POST',
+                body: JSON.stringify (busqueda),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            const resultado = await request.json();
+            console.log(resultado);
+            if(resultado.response.codRetorno === '0'){
+                setConsultaAlumno(resultado.listaAlumnos)
+                setAlumnos(false);
+            }else{
+                //mostrar mensaje que no hay información 
+                setAlumnos(true);
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    } 
+
+    const validacionesFiltro = () => {
+        if(checkMatricula && checkGrupo){
+            //Validar que se haya escrito algo y que se haya seleccionado del combobox una opcion
+            if(Object.keys(busqueda.matricula).length ===0 || busqueda.grupo === '-1'){
+                setAdvertencia(true);
+                setMensaje('Favor de ingresar los datos del filtro')
+                return false;
+            }
+            
+        }else if (checkGrupo){
+            if(busqueda.grupo === '-1'){
+                setAdvertencia(true);
+                setMensaje('Favor de seleccionar el grupo a consultar')
+                return false;
+            }
+        }else if(checkMatricula){
+            //validar que  se haya escrito algo 
+            if(Object.keys(busqueda.matricula).length ===0){
+                setAdvertencia(true);
+                setMensaje('Favor de ingresar la matricula')
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    const hdlClickBusquedaMatricula = () => {
+        setCheckMatricula(!checkMatricula);
+        setBusqueda({
+            ...busqueda,
+            matricula : ''
+        })
+        setAdvertencia(false);
+    }
+    const hdlClickBusquedaGrupo = () => {
+        setCheckGrupo(!checkGrupo)
+        setBusqueda({
+            ...busqueda,
+            grupo : '-1'
+        })
+        setAdvertencia(false);
+    }
 
     return ( 
-
-<>
+    <>
         <div className="format-busqueda">
             <div className="format-padding">
                 <label name="selectGrupo">Búsqueda por: </label>
@@ -98,10 +190,10 @@ const ConsultaAlumnos = () => {
                     <div className="p-4">
                         <div className="row">
                             <div className="col p-1">
-                                <label   htmlFor="txtBusquedaMatricula">Búsqueda por matricula</label>
+                                <label   htmlFor="matricula">Búsqueda por matricula</label>
                             </div>
                             <div className="col">
-                                <input type="text" className="form-control" id="txtBusquedaMatricula" name="txtBusquedaMatricula"   />
+                                <input type="text" className="form-control" id="matricula" onChange={actualizarBusqueda} value={busqueda.matricula ? busqueda.matricula : ''} name="matricula" pattern="[0-9]{0,13}"  maxLength='8'   />
                             </div>
                         </div>
                     </div>
@@ -116,15 +208,16 @@ const ConsultaAlumnos = () => {
                     <div className="p-4">
                         <div className="row">
                             <div className="col p-1 text-center">
-                                <label   htmlFor="buqueda">Búsqueda por grupo</label>
+                                <label   htmlFor="grupo">Búsqueda por grupo</label>
                             </div>
                             <div className="col">
                            
                                 <select 
-                                    id="buqueda"
-                                    name="buqueda"
+                                    id="grupo"
+                                    name="grupo"
                                     onChange={actualizarBusqueda}
-                                    className='custom-select' >
+                                    className='custom-select' 
+                                    value = {busqueda.grupo}>
                                     <option value="-1"  >Seleccione un grupo</option>
                                     {
                                         consultaGrupo.map(grupo => 
@@ -142,8 +235,19 @@ const ConsultaAlumnos = () => {
                         : 
                         null
                 }
+
+            {
+                advertencia ?
+                <Mensaje
+                mensaje={mensaje}
+                />
+            :null
+
+            }
+            
+
             <div className="format-padding">
-                <button className="btn btn-primary">Buscar</button>
+                <button className="btn btn-primary" onClick={buscarPorFiltro}>Buscar</button>
             </div>
         </div>
 

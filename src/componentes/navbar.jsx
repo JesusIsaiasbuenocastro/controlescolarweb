@@ -18,8 +18,6 @@ const NavBar = () => {
           <Link className="dropdown-item" to="/alumnos/altaalumnos">Nuevo</Link>
           <div className="dropdown-divider"></div>
           <Link className="dropdown-item" to="/alumnos/consultaalumnos">Consultar</Link>
-          <div className="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/alumnos/modificacionalumnos">Modificación</Link>
         </div>
       </li>
       <li className="nav-item dropdown">
@@ -30,8 +28,6 @@ const NavBar = () => {
           <Link className="dropdown-item" to="/maestros/altamaestros">Nuevo</Link>
           <div className="dropdown-divider"></div>
           <Link className="dropdown-item" to="/maestros/consultamaestros">Consultar</Link>
-          <div className="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/maestros/modificacionmaestros">Modificación</Link>
         </div>
       </li>
       <li className="nav-item dropdown">
@@ -42,8 +38,6 @@ const NavBar = () => {
           <Link className="dropdown-item" to="/calificaciones/altacalificacion">Nuevo</Link>
           <div className="dropdown-divider"></div>
           <Link className="dropdown-item" to="/calificaciones/consultacalificacion">Consultar</Link>
-          <div className="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/calificaciones/modificacioncalificacion">Modificación</Link>
         </div>
       </li>
       <li className="nav-item dropdown">
@@ -51,7 +45,7 @@ const NavBar = () => {
           Catalogos
         </a>
         <div className="dropdown-menu">
-          <a className="dropdown-item" href="#">Materias</a>
+          <Link className="dropdown-item" to="/materias/consultamaterias">Materias</Link>
           <div className="dropdown-divider"></div>
           <a className="dropdown-item" href="#">Grupos</a>
         </div>
