@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 3rem;
-  padding-top: 3rem;
+  
 }
 
 .format-padding{
@@ -39,9 +39,10 @@
   border-radius: 4rem;
   border-style: solid;
   border-width: 1px;
-  border-color: grey;
+  border-color: rgb(139, 241, 241);
+  box-shadow: 10px 5px 5px rgb(179, 249, 249);
   
-  height: 45rem;
+  height: 50rem;
   width:40rem;
   margin:0px auto; /*centrar*/
   margin-top: 4rem;

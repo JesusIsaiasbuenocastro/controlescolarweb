@@ -6,27 +6,23 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import OpcionesSelect from "../genericos/opcionesselect";
 import Mensaje from "../mensajes/mensaje";
+import useValidaciones from "../../hooks/useValidaciones";
 
 const ModificacionAlumnos = () => {
     const {matricula} = useParams();
-    const {navigate} = useNavigate();
+    const navigate = useNavigate();
     const [alumno, setAlumno] = useState([]);
     const [grupos, setGrupos] = useState([]);
-    const [existeAlumno, setExisteAlumno] = useState([]);
+    const[validarEmail] = useValidaciones(alumno.email);
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState(false);
- //validar el email 
- const validateEmail = (text) => {
-    return /\S+@\S+\.\S+/.test(text);
-  }
+
+    const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
+
 
    //useState de para guardar la ALUMNO
    const actualizarAlumno = (e) => {
     e.preventDefault();
-    //console.log(alumno);
-    
-
-
     const esValido = e.target.validity.valid;
     console.log(esValido);
     if(esValido){
@@ -38,39 +34,51 @@ const ModificacionAlumnos = () => {
     }
     
   }
-    useEffect(() =>{
-        console.log(matricula);
+    useEffect(() =>{ 
 
         //consultar materia
         const consultarAlumno= async () => {
             try {
-                                
-             //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-               const response = await axios.get(`http://localhost:8080/api/alumno/${matricula}`);
+                                 
+               const response = await axios.get(`${URLApi}/alumno/${matricula}`);
                 if(response.data.response.codRetorno === '0'){
                     setAlumno(response.data.alumno)
-                    setExisteAlumno(true);
                 }else{
-                    setExisteAlumno(false);
-                    setMensaje('No hay información para mostrar');
+                    //mandar mensaje 
+                    Swal.fire({
+                      position: 'center',
+                      icon: 'error',
+                      title: 'No exite el alumno a consultar',
+                      showConfirmButton: false,
+                      timer: 2500
+
+                    }).then(() => {
+                      // navigate('/catalogomodelos');
+                    })
+                    return;
                 }
 
-               
+                
 
             } catch (error) {
-                console.log(error)
+              Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'No exite el alumno a consultar',
+                showConfirmButton: false,
+                timer: 2500
+
+              }).then(() => {
+                navigate("/alumnos/consultaalumnos");
+              })
             }
         }
 
         const consultarGrupos= async () => {
-            try {
-                                
-                //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-                  const response = await axios.get('http://localhost:8080/api/grupo');
-                  console.log(response.data);
+            try { 
+                  const response = await axios.get(`${URLApi}/grupo`);
                    if(response.data.response.codRetorno === '0'){
-                       setGrupos(response.data.listaGrupos
-                        ) 
+                       setGrupos(response.data.listaGrupos) 
                    } 
    
                } catch (error) {
@@ -99,7 +107,7 @@ const ModificacionAlumnos = () => {
          setMensaje("Todos los campos son obligatorios");
          return;
         }
-            if(!validateEmail(alumno.email)){
+            if(!validarEmail()){
               setError(true);
               setMensaje('El email es incorrecto');
               return;
@@ -110,10 +118,7 @@ const ModificacionAlumnos = () => {
         console.log('paso las validaciones');
     setError(false);
         
-    let url = `https://controlescolarbackend.herokuapp.com/api/alumno/${alumno.matricula}`;
-    //let url = `http://localhost:8080/api/alumno`;
-      
-
+    let url = `${URLApi}/alumno/${alumno.matricula}`;
     try {
         let request;
 
@@ -155,6 +160,10 @@ const ModificacionAlumnos = () => {
         </div>    
         <div className="registro-form-centrar">
             <form>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Matricula</label>
+                <input type="text" class="form-control" id="txtMatricula" value={alumno.matricula ? alumno.matricula : ''}    name="matricula" disabled />
+              </div>
               <div class="form-group">
                 <label for="formGroupExampleInput2">Nombre</label>
                 <input type="text" class="form-control" id="txtNombre" value={alumno.nombre ? alumno.nombre : ''}    name="nombre" placeholder="Nombres" onChange={actualizarAlumno}/>
@@ -164,7 +173,7 @@ const ModificacionAlumnos = () => {
                 <input type="text" class="form-control" id="txtApellidos" value={alumno.apellidos ? alumno.apellidos : ''}    name ="apellidos" placeholder="Apellidos" onChange={actualizarAlumno}/>
               </div>
               <div class="form-group">
-                <label for="formGroupExampleInput2">Telefono</label>
+                <label for="formGroupExampleInput2">Teléfono</label>
                 <input type="text" class="form-control" id="txtTelefono" maxLength={10} value={alumno.telefono ? alumno.telefono : ''}  pattern="[0-9]{0,13}" name ="telefono" placeholder="Telefono" onChange={actualizarAlumno}/>
               </div>
               <div class="form-group">
@@ -195,7 +204,7 @@ const ModificacionAlumnos = () => {
               </div> : null}
              
              
-              <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Registrar</button>
+              <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Actualizar</button>
           </form>
           
         </div>

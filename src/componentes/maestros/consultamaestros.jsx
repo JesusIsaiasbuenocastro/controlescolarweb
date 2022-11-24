@@ -8,6 +8,8 @@ const ConsultaMaestros = () => {
     const [consultaMaestros, setConsultaMaestros] = useState([]);
     const [maestros, setMaestros] = useState([]);
 
+    const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
+
     useEffect(() => {
         
         //Se pudiera poner un spinner
@@ -16,8 +18,8 @@ const ConsultaMaestros = () => {
             const consultarMaestros = async () => {
                 try {
                             
-                    // const response = await axios.get('http://controlescolarbackend.herokuapp.com/api/maestros');
-                    const response = await axios.get('http://localhost:8080/api/maestros');
+                    const response = await axios.get(`${URLApi}/maestros`);
+                    //const response = await axios.get('http://localhost:8080/api/maestros');
                      console.log(response.data.listaMaestros);
                      if(response.data.response.codRetorno === '0'){
                         setConsultaMaestros(response.data.listaMaestros)
@@ -42,8 +44,11 @@ const ConsultaMaestros = () => {
     return ( 
         <>
         <div className="margin-consulta">
-        <div className="table-margin">
         
+        <div className="table-margin">
+        <div className="header-registro">
+          <h1>Consulta de maestros</h1>
+        </div>
         {
             !maestros ?
                     <table className="container table table-borderless table-hover ">
@@ -53,7 +58,7 @@ const ConsultaMaestros = () => {
                             <th width="20" >Id</th>
                             <th width="100" >Nombre</th>
                             <th width="20" >Apellidos</th>
-                            <th width="20" >Telefono</th>
+                            <th width="20" >Teléfono</th>
                             <th width="20" >Email</th>
                             <th width="20">Acciones</th>
                         </tr>

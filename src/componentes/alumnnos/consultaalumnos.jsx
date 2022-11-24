@@ -18,7 +18,7 @@ const ConsultaAlumnos = () => {
     const [mensaje, setMensaje] = useState('');
     const [advertencia, setAdvertencia] = useState(false);
 
-
+    const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
     useEffect(() => {
 
         //Se pudiera poner un spinner
@@ -31,9 +31,9 @@ const ConsultaAlumnos = () => {
     },[]);
     const consultarAlumnos = async () => {
         try {
-                            
-           // const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/alumno/obtenerlista');
-           const response = await axios.get('http://localhost:8080/api/alumno/obtenerlista');
+            
+            const response = await axios.get(`${URLApi}/alumno/obtenerlista`);         
+           //const response = await axios.get('http://localhost:8080/api/alumno/obtenerlista');
             console.log(response.data.listaAlumnos);
             if(response.data.response.codRetorno === '0'){
                 setConsultaAlumno(response.data.listaAlumnos)
@@ -50,7 +50,8 @@ const ConsultaAlumnos = () => {
     const consultarGrupos = async () => {
         try {
             //const response = await axios.get('http://localhost:8080/api/grupo/');
-            const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/grupo/');
+            //const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/grupo/');
+            const response = await axios.get(`${URLApi}/grupo/`);
             
             if(response.data.response.codRetorno === '0'){
                 setConsultaGrupo(response.data.listaGrupos) 
@@ -89,7 +90,10 @@ const ConsultaAlumnos = () => {
     }
 
     const obtenerListaAlumnosFiltro = async () => {
-        let url = `http://localhost:8080/api/alumno/obtenerlistafiltro` ;
+        //let url = `http://localhost:8080/api/alumno/obtenerlistafiltro` ;
+        //let url = `https://controlescolarbackend.herokuapp.com/api/alumno/obtenerlistafiltro` ;
+        let url = `${URLApi}/alumno/obtenerlistafiltro` ;
+        
         try {
             let request;
     
@@ -162,6 +166,9 @@ const ConsultaAlumnos = () => {
 
     return ( 
     <>
+    <div className="header-registro">
+          <h1>Consulta de alumnos</h1>
+        </div>
         <div className="format-busqueda">
             <div className="format-padding">
                 <label name="selectGrupo">Búsqueda por: </label>

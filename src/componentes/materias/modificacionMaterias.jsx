@@ -16,15 +16,15 @@ const ModificacionMaterias = () => {
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState(false);
 
+    const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
+
     useEffect(() =>{
         console.log(id);
 
         //consultar materia
         const consultarMaterias= async () => {
             try {
-                                
-             //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-               const response = await axios.get(`http://localhost:8080/api/materia/${id}`);
+               const response = await axios.get(`${URLApi}/materia/${id}`);
                 if(response.data.response.codRetorno === '0'){
                     setMateria(response.data.materia)
                     setExisteMateria(true);
@@ -43,8 +43,8 @@ const ModificacionMaterias = () => {
         const consultarMestros = async () => {
             try {
                                 
-                //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-                  const response = await axios.get('http://localhost:8080/api/maestros');
+              
+                  const response = await axios.get(`${URLApi}/maestros`);
                   console.log(response.data);
                    if(response.data.response.codRetorno === '0'){
                        setMaestros(response.data.listaMaestros
@@ -100,8 +100,7 @@ const ModificacionMaterias = () => {
             console.log('paso las validaciones');
         setError(false);
             
-        //let url = `https://controlescolarbackend.herokuapp.com/api/alumno`;
-        let url = `http://localhost:8080/api/materia/${id}`;
+        let url = `${URLApi}/materia/${id}`;
           
   
         try {

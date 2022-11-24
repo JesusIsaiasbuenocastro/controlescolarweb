@@ -4,10 +4,11 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import OpcionesSelect from "../genericos/opcionesselect";
 import Mensaje from "../mensajes/mensaje";
+import useValidaciones from "../../hooks/useValidaciones";
 
 const ModificacionMaestro = () => {
+  const navigate = useNavigate();
   const{id} = useParams();
   const[maestro, setMaestro] = useState({
     id: "",
@@ -19,17 +20,17 @@ const ModificacionMaestro = () => {
   });
   const[mensaje, setMensaje] = useState();
   const[error, setError] = useState(false);
+  const[validarEmail] = useValidaciones(maestro.email);
+
+
+  const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
 
   useEffect(() =>{
-    console.log(id);
-
-    //consultar materia
+    //consultar maestros
     const consultarMaestro= async () => {
         try {
                             
-         //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-           const response = await axios.get(`http://localhost:8080/api/maestros/${id}`);
-           console.log(response);
+           const response = await axios.get(`${URLApi}/maestros/${id}`);
             if(response.data.response.codRetorno === '0'){
                 setMaestro(response.data.maestro);
             }else{
@@ -43,12 +44,6 @@ const ModificacionMaestro = () => {
     consultarMaestro();
 
   },[]);
-
-
-  //validar el email 
-  const validateEmail = (text) => {
-    return /\S+@\S+\.\S+/.test(text);
-  }
 
   //useState de para guardar la maestro
   const actualizarMaestro = (e) => {
@@ -81,7 +76,7 @@ const ModificacionMaestro = () => {
          setMensaje("Todos los campos son obligatorios");
          return;
         }
-            if(!validateEmail(maestro.email)){
+            if(!validarEmail()){
               setError(true);
               setMensaje('El email es incorrecto');
               return;
@@ -92,10 +87,9 @@ const ModificacionMaestro = () => {
         console.log('paso las validaciones');
     setError(false);
         
-    //let url = `https://controlescolarbackend.herokuapp.com/api/maestro/${maestro.matricula}`;
-    let url =  `http://localhost:8080/api/maestros/${maestro.id}`;
-      
-
+    let url =  `${URLApi}/maestros/${maestro.id}`;
+    let icono = '';
+    let mensaje ='';
     try {
         let request;
 
@@ -108,34 +102,46 @@ const ModificacionMaestro = () => {
         });
 
         const resultado = await request.json();
-
-       //mandar mensaje de exito    
-        const MySwal = withReactContent(Swal)
-
-            Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Registro guardado exitosamente',
-            showConfirmButton: false,
-            timer: 1500,
-            
-            
-        }).then(() => {
-            // navigate('/catalogomodelos');
-        })
+        if(resultado.codRetorno !== '-1'){
+          console.log('entro a las variables de exito ')
+          //setIconoSweetAlert('success');
+          //setMensajeSweetAlert('Registro guardado exitosamente');
+          icono = 'success'
+          mensaje = 'Registro actualizado exitosamente'
+        }else{
+          console.log('entro a las variables de error') 
+          icono = 'error'
+          mensaje = 'Ocurrió un error'
+        }
+       
         
     } catch (error) {
         console.log(error);
+        icono = 'error'
+        mensaje = 'Ocurrió un error' 
     }
 
-    
+    //mandar mensaje de exito    
+    const MySwal = withReactContent(Swal)
+
+        Swal.fire({
+        position: 'center',
+        icon: icono,
+        title: mensaje,
+        showConfirmButton: false,
+        timer: 1500,
+        
+        
+    }).then(() => {
+      navigate('/maestros/consultamaestros');
+    })
 }
 
 
     return ( 
       <div className="registro-form">
       <div className="header-registro">
-        <h1>Actualizacón De Maestros</h1>
+        <h1>Actualización De Maestros</h1>
       </div>    
       <div className="registro-form-centrar">
           <form>
@@ -152,7 +158,7 @@ const ModificacionMaestro = () => {
               <input type="text" class="form-control" id="txtApellidos" value={maestro.apellidos ? maestro.apellidos : ''}    name ="apellidos" placeholder="Apellidos" onChange={actualizarMaestro}/>
             </div>
             <div class="form-group">
-              <label for="formGroupExampleInput2">Telefono</label>
+              <label for="formGroupExampleInput2">Teléfono</label>
               <input type="text" class="form-control" id="txtTelefono" maxLength={10} value={maestro.telefono ? maestro.telefono : ''}  pattern="[0-9]{0,13}" name ="telefono" placeholder="Telefono" onChange={actualizarMaestro}/>
             </div>
             <div class="form-group">
@@ -165,7 +171,7 @@ const ModificacionMaestro = () => {
             </div> : null}
            
            
-            <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Registrar</button>
+            <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Actualizar</button>
         </form>
         
       </div>

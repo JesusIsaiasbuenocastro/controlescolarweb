@@ -10,12 +10,13 @@ const ConsultaMaterias = () => {
     const[materias, setMaterias ] = useState(false);
     const[mensaje, setMensaje ] = useState('');
 
+    const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
+
     useEffect(() => {
         const consultarMaterias= async () => {
             try {
                                 
-             //   const response = await axios.get('https://controlescolarbackend.herokuapp.com/api/materias');
-               const response = await axios.get('http://localhost:8080/api/materias');
+                const response = await axios.get(`${URLApi}/materias` );
                 if(response.data.response.codRetorno === '0'){
                     setConsultaMaterias(response.data.listaMaterias)
                     setMaterias(true);
