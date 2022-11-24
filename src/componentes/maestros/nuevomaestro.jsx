@@ -139,7 +139,7 @@ const NuevoMaestro = () => {
               </div> : null}
              
              
-              <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Actualizar</button>
+              <button type="submit" class="btn btn-primary" onClick={guardarRegistro}>Registrar</button>
           </form>
           
         </div>
