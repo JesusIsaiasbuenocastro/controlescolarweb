@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import OpcionesSelect from "../genericos/opcionesselect";
@@ -10,7 +10,6 @@ import useValidaciones from "../../hooks/useValidaciones";
 
 const ModificacionAlumnos = () => {
     const {matricula} = useParams();
-    const navigate = useNavigate();
     const [alumno, setAlumno] = useState([]);
     const [grupos, setGrupos] = useState([]);
     const[validarEmail] = useValidaciones(alumno.email);
@@ -53,7 +52,7 @@ const ModificacionAlumnos = () => {
                       timer: 2500
 
                     }).then(() => {
-                      // navigate('/catalogomodelos');
+                      window.location('/alumnos/consultaalumnos')
                     })
                     return;
                 }
@@ -69,7 +68,7 @@ const ModificacionAlumnos = () => {
                 timer: 2500
 
               }).then(() => {
-                navigate("/alumnos/consultaalumnos");
+                window.location('/alumnos/consultaalumnos')
               })
             }
         }
@@ -144,7 +143,7 @@ const ModificacionAlumnos = () => {
             
             
         }).then(() => {
-            // navigate('/catalogomodelos');
+          window.location = '/alumnos/consultaalumnos'
         })
         
     } catch (error) {

@@ -1,14 +1,12 @@
  
 import { useState } from "react";
 import Mensaje from "../mensajes/mensaje";
-import useValidaciones from "../../hooks/useValidaciones";
-import { useNavigate } from "react-router-dom";
+import useValidaciones from "../../hooks/useValidaciones"; 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 
-const NuevoMaestro = () => {
-    const navigate = useNavigate();
+const NuevoMaestro = () => { 
     const[maestro, setMaestro] = useState({
         id: "",
         nombre: "",
@@ -105,8 +103,8 @@ const NuevoMaestro = () => {
           showConfirmButton: false,
           timer: 2500
   
-        }).then(() => {
-          navigate('/maestros/consultamaestros');
+        }).then(() => { 
+          window.location = '/maestros/consultamaestros'
         })
     }
     return ( 

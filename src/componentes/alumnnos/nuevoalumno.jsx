@@ -18,18 +18,19 @@ const NuevoAlumno = () => {
 
   //useState de para guardar la ALUMNO
    const actualizarAlumno = (e) => {
+    //useState de para guardar la ALUMNO
+   const actualizarAlumno = (e) => {
     e.preventDefault();
-    //console.log(alumno);
-    if(e.target.name==='email'){
-      console.log("Entro a validar el email")
-      if(!validarEmail()){
-        setError(true);
-        setMensaje('El email es incorrecto');
-        return;
-      }else {
-        setError(false);
+    const esValido = e.target.validity.valid;
+    console.log(esValido);
+    if(esValido){
+      setAlumno({
+        ...alumno,
+        [e.target.name] : e.target.value
+        
+        })
       }
-     }
+    }
 
 
     const esValido = e.target.validity.valid;
@@ -45,19 +46,13 @@ const NuevoAlumno = () => {
     //Guardar registro
     const guardarRegistro = async (e)  => {
       e.preventDefault();
-      
-      if( Object.keys(alumno).length < 5){
-          //mandar mensaje de validación
-          setError(true);
-          setMensaje("Todos los campos son obligatorios");
-          return;
-      }
+      console.log(alumno);
       //Validar que seleccione los datos correctos
       if(Object.keys(alumno.nombre).length ===0
-        || Object.keys(alumno.apellidos).length ===0
-        || Object.keys(alumno.telefono).length ===0
-        || Object.keys(alumno.email).length ===0
-          || alumno.grupo === "-1")
+      || Object.keys(alumno.apellidos).length ===0
+      || alumno.telefono ===0
+      || Object.keys(alumno.email).length ===0
+        || alumno.grupo === "-1")
         {
            //mandar mensaje de validación
            setError(true);
@@ -118,7 +113,7 @@ const NuevoAlumno = () => {
         timer: 2500
 
       }).then(() => {
-        // navigate('/catalogomodelos');
+        window.location = '/alumnos/consultaalumnos'
       })
 
     

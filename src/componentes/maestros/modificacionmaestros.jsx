@@ -133,7 +133,7 @@ const ModificacionMaestro = () => {
         
         
     }).then(() => {
-      navigate('/maestros/consultamaestros');
+      window.location = '/maestros/consultamaestros';
     })
 }
 
