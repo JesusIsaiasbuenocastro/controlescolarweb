@@ -269,7 +269,7 @@ const ConsultaAlumnos = () => {
                             <th width="20" >Matricula</th>
                             <th width="100" >Nombre</th>
                             <th width="20" >Apellidos</th>
-                            <th width="20" >Telefono</th>
+                            <th width="20" >Teléfono</th>
                             <th width="20" >Email</th>
                             <th width="20" >Grupo</th>
                             <th width="20">Acciones</th>

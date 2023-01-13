@@ -52,9 +52,8 @@ const ModificacionAlumnos = () => {
                       timer: 2500
 
                     }).then(() => {
-                      window.location('/alumnos/consultaalumnos')
+                      window.location = '/alumnos/consultaalumnos'
                     })
-                    return;
                 }
 
                 
@@ -68,7 +67,7 @@ const ModificacionAlumnos = () => {
                 timer: 2500
 
               }).then(() => {
-                window.location('/alumnos/consultaalumnos')
+                window.location = '/alumnos/consultaalumnos'
               })
             }
         }
@@ -93,7 +92,6 @@ const ModificacionAlumnos = () => {
   //Guardar registro
   const guardarRegistro = async (e)  => {
     e.preventDefault();
-    
     //Validar que seleccione los datos correctos
     if(Object.keys(alumno.nombre).length ===0
     || Object.keys(alumno.apellidos).length ===0

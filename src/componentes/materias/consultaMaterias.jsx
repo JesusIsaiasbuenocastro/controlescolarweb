@@ -15,7 +15,7 @@ const ConsultaMaterias = () => {
     useEffect(() => {
         const consultarMaterias= async () => {
             try {
-                                
+                console.log('Entro a consultar las materias')
                 const response = await axios.get(`${URLApi}/materias` );
                 if(response.data.response.codRetorno === '0'){
                     setConsultaMaterias(response.data.listaMaterias)
@@ -24,6 +24,7 @@ const ConsultaMaterias = () => {
                     setMaterias(false);
                     setMensaje('No hay información para mostrar');
                 }
+                console.log(materias);
 
             } catch (error) {
                 console.log(error)
