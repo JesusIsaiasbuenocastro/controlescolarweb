@@ -32,16 +32,6 @@ const NavBar = () => {
       </li>
       <li className="nav-item dropdown">
         <a className="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-          Calificaciones
-        </a>
-        <div className="dropdown-menu">
-          <Link className="dropdown-item" to="/calificaciones/altacalificacion">Nuevo</Link>
-          <div className="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/calificaciones/consultacalificacion">Consultar</Link>
-        </div>
-      </li>
-      <li className="nav-item dropdown">
-        <a className="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
           Catalogos
         </a>
         <div className="dropdown-menu">
