@@ -20,7 +20,7 @@ const NuevoAlumno = () => {
   const [error , setError] = useState(false);
   const [mensaje , setMensaje] = useState(''); 
   const URLApi  = process.env.REACT_APP_CONTROL_ESCOLAR_API_URL;
-  const[validarEmail] = useValidaciones(alumno.email);
+  const[validarEmail] =useValidaciones(alumno.email);
 
   //useState de para guardar la ALUMNO 
    const actualizarAlumno = (e) => {

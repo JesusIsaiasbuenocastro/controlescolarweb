@@ -134,7 +134,7 @@ const ModificacionMaterias = () => {
             
           
         }).then(() => {
-           //navigate('/materias/consultamaterias');
+          window.location ='/materias/consultamaterias';
         })
     }
     
