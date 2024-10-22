@@ -12,10 +12,10 @@ const Inicio = () => {
                         <Cards texto="Alumnos" imagen={ImagenEstudiante} descripcion="Consulta y modifica a los alumnos" redirigir="/alumnos/consultaalumnos"></Cards>
                     </div>
                     <div className="col format-shadow">
-                        <Cards texto="Maestros" imagen={ImagenProfesor} descripcion="Consulta y modifica los datos de los maestros" redirigir="/maestros/consultamaestros"></Cards>
+                        <Cards texto="Cursos" imagen={ImagenProfesor} descripcion="Consulta y modifica los datos de los cursos" redirigir="/maestros/consultamaestros"></Cards>
                     </div>
                     <div className="col format-shadow">
-                        <Cards texto="Calificaciones" imagen={ImagenCalificacion} descripcion="Consulta de calificaciones" redirigir="/calificaciones/consultacalificacion"></Cards>
+                        <Cards texto="Pagos" imagen={ImagenCalificacion} descripcion="Agrega y consulta pagos de los alumnos" redirigir="/calificaciones/consultacalificacion"></Cards>
                     </div>
                 </div>
             </div>

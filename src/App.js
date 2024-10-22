@@ -18,13 +18,17 @@ import ModificacionCalificacion from "./componentes/calificaciones/modificacionc
 import ConsultaMaterias from "./componentes/materias/consultaMaterias"; 
 import ModificacionMaterias from "./componentes/materias/modificacionMaterias"; 
 import NuevoMaterias from "./componentes/materias/nuevoMaterias";
+import LoginForm from "./componentes/login";
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
+        <Route path='/' >
+          <Route index element= {<LoginForm/>} />         
+        </Route>
         //rutas alumnos 
-        <Route path='/' element={<LayOut/>}>
+        <Route path='/inicio' element={<LayOut/>}>
           <Route index element= {<Inicio/>} />         
         </Route>
         <Route path='/alumnos/consultaalumnos' element={<LayOut/>}>
